@@ -1,11 +1,25 @@
 const express = require('express');
+const swaggerUi = require('swagger-ui-express');
+const swaggerJsdoc = require('swagger-jsdoc');
+
 const app = express();
-const port = 3001;
 
-app.get('/',(req,res) => {
-    res.send( 'hello from chat service')
-})
+// Definição das opções do Swagger
+const swaggerOptions = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'API do Meu Projeto',
+      version: '1.0.0',
+      description: 'Documentação da API do meu projeto',
+    },
+  },
+  apis: ['./routes/*.js'], // Caminho para os arquivos com as rotas
+};
 
-app.listen(port,() => {
-    console.log(`chat service listen at http:/127.0.0.1:${port}`)
-});
+const swaggerSpec = swaggerJsdoc(swaggerOptions);
+
+// Rota para a documentação do Swagger
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+// ... resto do seu código ...
